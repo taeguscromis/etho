@@ -1,0 +1,43 @@
+body
+{
+  font-size: 0.8em;
+}
+
+td.text-center
+{
+	text-align: center;
+}
+
+td.text-right
+{
+	text-align: right;	
+}
+
+#maincontent
+{
+	width: 100%;	
+}
+
+#richlisttable_wrapper
+{
+	width: 100%; 
+	max-width: 1600px;
+	margin: 0 auto;
+}
+
+#richlisttable
+{
+
+	width:100%
+}
+
+.card
+{
+	border:	0px none;
+}
+
+label.addressLabel
+{
+	font-size: 1em;
+	color: #009688;
+}

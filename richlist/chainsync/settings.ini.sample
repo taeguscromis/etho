@@ -1,0 +1,12 @@
+[blockchain]
+lastblock=168735
+
+[database]
+ConnectorType=mysql 5.7
+HostName=localhost
+DatabaseName=etherchain
+UserName=etherscan
+Password=etherscan
+
+[rpc]
+url=https://rpc.ether1.org
