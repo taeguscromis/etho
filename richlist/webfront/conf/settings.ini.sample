@@ -1,0 +1,5 @@
+[database]
+servername=localhost
+username=mysqlusername
+password=mysqlpassword
+dbname=thenameofthedb
