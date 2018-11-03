@@ -1,7 +1,7 @@
 ## 1. Compilation
 
 To compile you need to first install FPC. To do this on Ubuntu, the simplest way is to download the DEB package and install it.
-the package is available here: https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%201.8.4/fpc_3.0.4-3_amd64.deb/download
+the package is available [here](https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%201.8.4/fpc_3.0.4-3_amd64.deb/download).
 
 Then go to the "chainsync" directory and simply do: **fpc -B -Fu"libs/synapse" EtherSync.lpr**
 You should get and "EtherSync" executable. Thats it.
@@ -12,6 +12,7 @@ Just rename the settings.ini.sample to settings.ini and put it in the same direc
 The executable needs write permissions in that directory. It will be best if you run it as a service.
 Set the settings in the ini file accordingly.
 
+```
 [blockchain]
 lastblock=Should be set to 1, to start at the chain beggining
 
@@ -24,6 +25,34 @@ Password=mysql password
 
 [rpc]
 url=the URL of the geth rpc server
+```
 
+To run as a service use **systemctl**
 
+```
+[Unit]
+Description=EtherSync
+After=network.target
 
+[Service]
+Type=simple
+# Another Type option: forking
+User=ethersync
+WorkingDirectory=/usr/bin
+ExecStart=/usr/bin/EtherSync
+Restart=on-failure
+# Other Restart options: or always, on-abort, etc
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+Copy **EtherSync.service.sample** to **/etc/systemd/system/EtherSync.service** and edit it approprietly.
+
+Now you can start it or stop it with:
+
+**start**: sudo systemctl start EtherSync
+**stop**: sudo systemctl stop EtherSync
+
+Not that if you run your own geth RPC you have to have it running and fully synced

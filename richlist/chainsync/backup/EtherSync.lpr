@@ -546,6 +546,7 @@ end;
 
 destructor TEtherSync.Destroy;
 begin
+  FreeAndNil(FTerminateEvent);
   FreeAndNil(FSyncSettings);
 
   inherited Destroy;
