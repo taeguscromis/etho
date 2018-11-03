@@ -11,11 +11,18 @@
   } 
   else 
   {
+    // get ordering information from the datatables and construct SQL appropriately
+    $sortColumns = array('address' => 1, 'value' => 2, 'numIn' => 6, 'numOut' => 9);
+    $orderAsJSON = $_GET['order'][0];
+    $orderColumn = array_search($orderAsJSON['column'], $sortColumns);
+    $orderDir = $orderAsJSON['dir'];
+
+    // get pagin info (start and length)
     $record_start = intval($_GET['start']);
     $record_limit = intval($_GET['length']);
     
     // main query for the actuall table data
-    $sql = "SELECT * FROM richlist ORDER BY value DESC LIMIT $record_limit OFFSET $record_start";
+    $sql = "SELECT * FROM richlist ORDER BY $orderColumn $orderDir LIMIT $record_limit OFFSET $record_start";
     $result = $conn->query($sql);
 
     // the current circulating supply of ETHO
