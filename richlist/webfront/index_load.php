@@ -3,7 +3,6 @@
   $config = parse_ini_file('/var/www/conf/richlist/settings.ini'); 
   // Create connection
   $conn = new mysqli($config['servername'],$config['username'],$config['password'],$config['dbname']);
-  $table_columns = array("address" => "1", "value" => "2", "numIn" => "6", "numOut" => "9");
 
   // Check connection
   if ($conn->connect_error) {
