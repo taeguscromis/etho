@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="/usr/bin/fpc" Date="1526926378"/>
-  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq -Fi/home/iztok/Projects/Ether1/richlist/chainsync/lib/x86_64-linux -Fu/home/iztok/Projects/Ether1/richlist/chainsync/libs/synapse -Fu/home/iztok/Projects/Ether1/richlist/chainsync/libs/mongo4delphi/src -Fu/home/iztok/Projects/Ether1/richlist/chainsync/ -FU/home/iztok/Projects/Ether1/richlist/chainsync/lib/x86_64-linux/ EtherSync.lpr"/>
-</CONFIG>
