@@ -52,7 +52,7 @@ Copy **EtherSync.service.sample** to **/etc/systemd/system/EtherSync.service** a
 
 Now you can start it or stop it with:
 
-**start**: sudo systemctl start EtherSync
-**stop**: sudo systemctl stop EtherSync
+- **start**: sudo systemctl start EtherSync
+- **stop**: sudo systemctl stop EtherSync
 
 Not that if you run your own geth RPC you have to have it running and fully synced
