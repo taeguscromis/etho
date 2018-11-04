@@ -34,7 +34,6 @@ To run as a service use **systemctl**
 ```
 [Unit]
 Description=EtherSync
-After=network.target
 
 [Service]
 Type=simple
