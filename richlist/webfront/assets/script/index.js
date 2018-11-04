@@ -15,7 +15,6 @@ $(document).ready(function()
 
   $('#richlisttable').DataTable( 
   {
-      "searching": false,
       "pageLength": 50,
       "processing": true,
       "serverSide": true,
@@ -83,6 +82,9 @@ $(document).ready(function()
   {
     $("#dataPrice").html(data.USD + " $");
   }); 
+
+  // add class to the search filter
+  $('#richlisttable_filter input').addClass('searchFilter');
 
   onWindowResizeEvent();    
 });

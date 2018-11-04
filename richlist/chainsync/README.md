@@ -3,6 +3,8 @@
 To compile you need to first install FPC. To do this on Ubuntu, the simplest way is to download the DEB package and install it.
 the package is available [here](https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%201.8.4/fpc_3.0.4-3_amd64.deb/download).
 
+You will also need to install mysql client lib: **sudo apt install libmysqlclient-dev**
+
 Then go to the "chainsync" directory and simply do: **fpc -B -Fu"libs/synapse" EtherSync.lpr**
 You should get and "EtherSync" executable. Thats it.
 
@@ -54,5 +56,7 @@ Now you can start it or stop it with:
 
 - **start**: sudo systemctl start EtherSync
 - **stop**: sudo systemctl stop EtherSync
+- **print log**: journalctl -e -u EtherSync.service
+- **reload conf**: systemctl daemon-reload
 
 Not that if you run your own geth RPC you have to have it running and fully synced

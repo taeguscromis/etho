@@ -16,12 +16,14 @@
     $orderColumn = array_search($orderAsJSON['column'], $sortColumns);
     $orderDir = $orderAsJSON['dir'];
 
+    // get the search adrress if any is present
+    $searchAddress = $_GET['search']['value'];
     // get pagin info (start and length)
     $record_start = intval($_GET['start']);
     $record_limit = intval($_GET['length']);
     
     // main query for the actuall table data
-    $sql = "SELECT * FROM richlist ORDER BY $orderColumn $orderDir LIMIT $record_limit OFFSET $record_start";
+    $sql = "SELECT * FROM richlist where address LIKE '%$searchAddress%' ORDER BY $orderColumn $orderDir LIMIT $record_limit OFFSET $record_start";
     $result = $conn->query($sql);
 
     // the current circulating supply of ETHO
@@ -68,7 +70,7 @@
     }
 
     // return the table data
-    $table_data->data = $rows_data;
+    $table_data->data = $rows_data;    
     echo json_encode($table_data);
   }
   $conn->close();   

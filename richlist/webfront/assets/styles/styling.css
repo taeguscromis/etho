@@ -41,3 +41,8 @@ label.addressLabel
 	font-size: 1em;
 	color: #009688;
 }
+
+.searchFilter
+{
+	width: 30em;
+}

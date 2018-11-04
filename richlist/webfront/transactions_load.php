@@ -25,9 +25,8 @@
     $result = $conn->query($sql);
 
     // count of total rows in the richlist table
-    $count = $conn->query("SELECT count(*) as 'total_rows' FROM richlist");
+    $count = $conn->query("SELECT count(*) as 'total_rows' FROM transactions WHERE (fromaddr = '" . $_GET['address'] . "') OR (toaddr = '" . $_GET['address'] . "')");
     $count = $count->fetch_assoc();
-
 
     $table_data = (object) 
     [
