@@ -23,15 +23,15 @@
     $record_limit = intval($_GET['length']);
     
     // main query for the actuall table data
-    $sql = "SELECT * FROM richlist where address LIKE '%$searchAddress%' ORDER BY $orderColumn $orderDir LIMIT $record_limit OFFSET $record_start";
+    $sql = "SELECT * FROM richlist WHERE address LIKE '%$searchAddress%' ORDER BY $orderColumn $orderDir LIMIT $record_limit OFFSET $record_start";
     $result = $conn->query($sql);
 
     // the current circulating supply of ETHO
-    $supply = $conn->query("SELECT sum(value) as 'supply' FROM richlist;");
+    $supply = $conn->query("SELECT sum(value) as 'supply' FROM richlist");
     $supply = $supply->fetch_assoc();
 
     // count of total rows in the richlist table
-    $count = $conn->query("SELECT count(*) as 'total_rows' FROM richlist");
+    $count = $conn->query("SELECT count(*) as 'total_rows' FROM (SELECT id FROM richlist WHERE address LIKE '%$searchAddress%') AS derived");
     $count = $count->fetch_assoc();
 
 

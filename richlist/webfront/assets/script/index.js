@@ -3,7 +3,7 @@ $(document).ready(function()
   function getDataTableHeight()
 	{
     var tableBottom = $("#richlisttable_wrapper").offset().top + $("#richlisttable_wrapper").outerHeight(true);
-    return ($('.dataTables_scrollBody').height() - (tableBottom - $(window).height())) - 30;
+    return ($('.dataTables_scrollBody').height() - (tableBottom - $(window).height())) - 60;
   }
 
   var ImportantAddresses = 
@@ -21,7 +21,7 @@ $(document).ready(function()
       "scrollCollapse": true,
       "pagingType": "full_numbers",
       "ajax": "index_load.php",
-      "sScrollY": $(window).height() - 140,
+      "sScrollY": $(window).height() - 160,
       "order": [[ 2, "desc" ]],
       'columnDefs': 
       [

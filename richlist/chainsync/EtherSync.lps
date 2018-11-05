@@ -8,10 +8,10 @@
         <Filename Value="EtherSync.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="530"/>
-        <CursorPos Y="549"/>
+        <TopLine Value="294"/>
+        <CursorPos X="20" Y="327"/>
         <UsageCount Value="146"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="../NodeApps/ImporterConsole/airtimeimporter.lpr"/>
@@ -138,9 +138,6 @@
         <UsageCount Value="5"/>
       </Unit18>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="-1"/>
-    </General>
     <JumpHistory HistoryIndex="-1"/>
   </ProjectSession>
   <Debugging>

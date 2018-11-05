@@ -20,7 +20,7 @@ $(document).ready(function()
  	function getDataTableHeight()
 	{
   	var tableBottom = $("#transactionstable_wrapper").offset().top + $("#transactionstable_wrapper").outerHeight(true);
-   	return ($('.dataTables_scrollBody').height() - (tableBottom - $(window).height())) - 20;
+   	return ($('.dataTables_scrollBody').height() - (tableBottom - $(window).height())) - 45;
   }
 
   $('#transactionstable').DataTable( 

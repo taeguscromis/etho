@@ -46,3 +46,14 @@ label.addressLabel
 {
 	width: 30em;
 }
+
+.row
+{
+	align-items: center;
+        justify-content: center;
+}
+
+#pageLogo {
+	text-align: left;
+	padding-left: 0px;
+}

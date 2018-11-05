@@ -268,7 +268,7 @@ begin
       AResult.Free;
     end;
   finally
-    Parameters := nil;
+    Parameters.Free;
   end;
 end;
 
@@ -324,7 +324,7 @@ begin
       AResult.Free;
     end;
   finally
-    Parameters := nil;
+    Parameters.Free;
   end;
 end;
 
