@@ -12,6 +12,7 @@ uses
   fpjson, jsonparser,
   // MYSQL
   db, sqldb, mysql57conn;
+
 type
 
   { TEtherSync }
@@ -37,6 +38,7 @@ type
     function FindAddressInMysqlDB(const address: string): Boolean;
     procedure UpdateAddressBalance(const address: string);
     function GetCurrentBlockNumber: Int64;
+    procedure UpdateTopHundredAddresses;
     procedure SyncEtherBlockchain;
     procedure ShowCurrentBlock;
   protected
@@ -207,6 +209,7 @@ procedure TEtherSync.UpdateAddressBalance(const address: string);
 var
   HTTP: THTTPSend;
   Value: Double;
+  OldVal: Double;
   Options: TJSONArray;
   AResult: TMemoryStream;
   JSONData: TJSONData;
@@ -251,10 +254,40 @@ begin
             Value := HexToDecimal(JSONData.FindPath('result').AsString);
 
             FSQLQuery.SQL.Clear;
-            FSQLQuery.SQL.Add('UPDATE richlist SET value = :value WHERE address = :address');
+            FSQLQuery.SQL.Add('SELECT value from richlist WHERE address = :address');
             FSQLQuery.ParamByName('address').AsString := address;
-            FSQLQuery.ParamByName('value').AsFloat := Value;
-            FSQLQuery.ExecSQL;
+            FSQLQuery.Open;
+            try
+              FSQLQuery.First;
+              OldVal := 0;
+
+              if not FSQLQuery.EOF then
+              begin
+                case FSQLQuery.FieldByName('value').IsNull of
+                  False: OldVal := FSQLQuery.FieldByName('value').AsFloat;
+                  True: OldVal := 0;
+                end;
+              end;
+            finally
+              FSQLQuery.Close;
+            end;
+
+            if Abs(OldVal - Value) > 10000000000 then
+            begin
+              FSQLQuery.SQL.Clear;
+              FSQLQuery.SQL.Add('UPDATE richlist SET value = :value, needupdate = 0, updatecount = updatecount + 1 WHERE address = :address');
+              FSQLQuery.ParamByName('address').AsString := address;
+              FSQLQuery.ParamByName('value').AsFloat := Value;
+              FSQLQuery.ExecSQL;
+            end
+            else
+            begin
+              FSQLQuery.SQL.Clear;
+              FSQLQuery.SQL.Add('UPDATE richlist SET value = :value, needupdate = 0 WHERE address = :address');
+              FSQLQuery.ParamByName('address').AsString := address;
+              FSQLQuery.ParamByName('value').AsFloat := Value;
+              FSQLQuery.ExecSQL;
+            end;
           finally
             JSONData.Free;
           end;
@@ -269,6 +302,75 @@ begin
     end;
   finally
     Parameters.Free;
+  end;
+end;
+
+procedure TEtherSync.UpdateTopHundredAddresses;
+var
+  I: Integer;
+  AddressList: TStringList;
+begin
+  FSQLTrans.StartTransaction;
+  try
+    FSQLQuery.SQL.Clear;
+    FSQLQuery.SQL.Add('UPDATE richlist SET needupdate = needupdate + 1');
+    FSQLQuery.ExecSQL;
+
+    AddressList := TStringList.Create;
+    try
+      // do the top 100 by change
+      FSQLQuery.SQL.Clear;
+      FSQLQuery.SQL.Add('SELECT address FROM richlist ORDER BY updatecount DESC LIMIT 500');
+      FSQLQuery.Open;
+      try
+        FSQLQuery.First;
+
+        while not FSQLQuery.EOF do
+        begin
+          AddressList.Add(FSQLQuery.FieldByName('address').AsString);
+          FSQLQuery.Next;
+        end;
+      finally
+        FSQLQuery.Close;
+      end;
+
+      // update the actuall balances
+      for I := 0 to AddressList.Count - 1 do
+        UpdateAddressBalance(AddressList[I]);
+
+      AddressList.Clear;
+      // do the next 100 in line
+      FSQLQuery.SQL.Clear;
+      FSQLQuery.SQL.Add('SELECT address FROM richlist ORDER BY needupdate DESC LIMIT 100');
+      FSQLQuery.Open;
+      try
+        FSQLQuery.First;
+
+        while not FSQLQuery.EOF do
+        begin
+          AddressList.Add(FSQLQuery.FieldByName('address').AsString);
+          FSQLQuery.Next;
+        end;
+      finally
+        FSQLQuery.Close;
+      end;
+
+      // update the actuall balances
+      for I := 0 to AddressList.Count - 1 do
+        UpdateAddressBalance(AddressList[I]);
+    finally
+      AddressList.Free;
+    end;
+
+    // commit changes
+    FSQLTrans.Commit;
+  except
+    on E: Exception do
+    begin
+      WriteLn(Format('TEtherSync.UpdateTopHundredAddresses error: %s', [E.Message]));
+      FSQLTrans.Rollback;
+      Halt;
+    end;
   end;
 end;
 
@@ -487,8 +589,11 @@ begin
             Inc(BlockNum);
           end;
 
-          // sleep for 2 minutes
-          Sleep(120000);
+          // check 100 addresses
+          UpdateTopHundredAddresses;
+
+          // sleep for 10 seconds
+          Sleep(5000);
         end;
       finally
         HTTP.Free;

@@ -3,14 +3,14 @@
   <ProjectSession>
     <Version Value="10"/>
     <BuildModes Active="Default"/>
-    <Units Count="19">
+    <Units Count="17">
       <Unit0>
         <Filename Value="EtherSync.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="294"/>
-        <CursorPos X="20" Y="327"/>
-        <UsageCount Value="146"/>
+        <TopLine Value="256"/>
+        <CursorPos X="49" Y="275"/>
+        <UsageCount Value="251"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -18,127 +18,235 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="161"/>
         <CursorPos X="83" Y="185"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="29"/>
       </Unit1>
       <Unit2>
         <Filename Value="libs/mongo4delphi/src/BSONTypes.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="843"/>
         <CursorPos Y="850"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="29"/>
       </Unit2>
       <Unit3>
         <Filename Value="libs/synapse/httpsend.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="137"/>
         <CursorPos X="14" Y="157"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="10"/>
       </Unit3>
       <Unit4>
         <Filename Value="libs/mongo4delphi/src/MongoCollection.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="14" Y="59"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="29"/>
       </Unit4>
       <Unit5>
-        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-json/src/fpjson.pp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="746"/>
-        <CursorPos X="16" Y="771"/>
-        <UsageCount Value="6"/>
-      </Unit5>
-      <Unit6>
         <Filename Value="libs/mongo4delphi/src/MongoCollectionApiLayer.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="182"/>
         <CursorPos Y="193"/>
-        <UsageCount Value="41"/>
-      </Unit6>
-      <Unit7>
+        <UsageCount Value="29"/>
+      </Unit5>
+      <Unit6>
         <Filename Value="libs/mongo4delphi/src/Mongo.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="28"/>
         <CursorPos X="15" Y="52"/>
-        <UsageCount Value="41"/>
-      </Unit7>
-      <Unit8>
+        <UsageCount Value="29"/>
+      </Unit6>
+      <Unit7>
         <Filename Value="libs/mongo4delphi/src/MongoProvider.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="526"/>
         <CursorPos X="38" Y="534"/>
-        <UsageCount Value="41"/>
-      </Unit8>
-      <Unit9>
+        <UsageCount Value="29"/>
+      </Unit7>
+      <Unit8>
         <Filename Value="libs/mongo4delphi/src/MongoEncoder.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="141"/>
         <CursorPos Y="150"/>
-        <UsageCount Value="41"/>
-      </Unit9>
-      <Unit10>
+        <UsageCount Value="29"/>
+      </Unit8>
+      <Unit9>
         <Filename Value="libs/mongo4delphi/src/MongoDBCursorIntf.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="44" Y="27"/>
-        <UsageCount Value="41"/>
-      </Unit10>
-      <Unit11>
+        <UsageCount Value="29"/>
+      </Unit9>
+      <Unit10>
         <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/sqldb/sqldb.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="595"/>
         <CursorPos X="12" Y="616"/>
-        <UsageCount Value="41"/>
-      </Unit11>
-      <Unit12>
+        <UsageCount Value="29"/>
+      </Unit10>
+      <Unit11>
         <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/sqldb/mysql/mysql56conn.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="41"/>
-      </Unit12>
-      <Unit13>
+        <UsageCount Value="29"/>
+      </Unit11>
+      <Unit12>
         <Filename Value="/usr/share/fpcsrc/3.0.4/packages/rtl-objpas/src/inc/dateutil.pp"/>
         <UnitName Value="dateutils"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="41"/>
-      </Unit13>
-      <Unit14>
+        <UsageCount Value="29"/>
+      </Unit12>
+      <Unit13>
         <Filename Value="/usr/share/fpcsrc/3.0.4/packages/rtl-objpas/src/inc/dateutil.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2117"/>
         <CursorPos Y="2154"/>
-        <UsageCount Value="41"/>
-      </Unit14>
-      <Unit15>
+        <UsageCount Value="29"/>
+      </Unit13>
+      <Unit14>
         <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-base/src/custapp.pp"/>
         <UnitName Value="CustApp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="107"/>
         <CursorPos X="17" Y="60"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="29"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/math.pp"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="241"/>
+        <CursorPos X="3" Y="260"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit15>
       <Unit16>
-        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/inc/objpash.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="175"/>
-        <CursorPos X="23" Y="194"/>
-        <UsageCount Value="5"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="1191"/>
+        <CursorPos X="14" Y="1214"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
       </Unit16>
-      <Unit17>
-        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-base/src/syncobjs.pp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="16"/>
-        <CursorPos X="29" Y="35"/>
-        <UsageCount Value="5"/>
-      </Unit17>
-      <Unit18>
-        <Filename Value="libs/synapse/ssl_openssl.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="888"/>
-        <CursorPos X="60" Y="907"/>
-        <UsageCount Value="5"/>
-      </Unit18>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="302" TopLine="272"/>
+      </Position1>
+      <Position2>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="276" TopLine="269"/>
+      </Position2>
+      <Position3>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="278" TopLine="269"/>
+      </Position3>
+      <Position4>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="279" TopLine="269"/>
+      </Position4>
+      <Position5>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="280" TopLine="269"/>
+      </Position5>
+      <Position6>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="281" TopLine="269"/>
+      </Position6>
+      <Position7>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="282" TopLine="269"/>
+      </Position7>
+      <Position8>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="284" TopLine="269"/>
+      </Position8>
+      <Position9>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="285" TopLine="269"/>
+      </Position9>
+      <Position10>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="286" TopLine="269"/>
+      </Position10>
+      <Position11>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="287" TopLine="269"/>
+      </Position11>
+      <Position12>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="288" TopLine="269"/>
+      </Position12>
+      <Position13>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="289" TopLine="269"/>
+      </Position13>
+      <Position14>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="290" TopLine="269"/>
+      </Position14>
+      <Position15>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="292" TopLine="269"/>
+      </Position15>
+      <Position16>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="294" TopLine="269"/>
+      </Position16>
+      <Position17>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="295" TopLine="269"/>
+      </Position17>
+      <Position18>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="300" TopLine="270"/>
+      </Position18>
+      <Position19>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="302" TopLine="272"/>
+      </Position19>
+      <Position20>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="276" TopLine="269"/>
+      </Position20>
+      <Position21>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="307" TopLine="289"/>
+      </Position21>
+      <Position22>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="275" TopLine="252"/>
+      </Position22>
+      <Position23>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="15"/>
+      </Position23>
+      <Position24>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="277" Column="39" TopLine="269"/>
+      </Position24>
+      <Position25>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="15" TopLine="59"/>
+      </Position25>
+      <Position26>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="362" Column="29" TopLine="346"/>
+      </Position26>
+      <Position27>
+        <Filename Value="EtherSync.lpr"/>
+      </Position27>
+      <Position28>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="39" Column="35" TopLine="8"/>
+      </Position28>
+      <Position29>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="183" Column="25" TopLine="152"/>
+      </Position29>
+      <Position30>
+        <Filename Value="EtherSync.lpr"/>
+        <Caret Line="185" Column="25" TopLine="154"/>
+      </Position30>
+    </JumpHistory>
   </ProjectSession>
   <Debugging>
     <BreakPoints Count="2">
@@ -157,16 +265,19 @@
         <Line Value="593"/>
       </Item2>
     </BreakPoints>
-    <Watches Count="3">
+    <Watches Count="4">
       <Item1>
-        <Expression Value="AnAdress"/>
+        <Expression Value="address"/>
       </Item1>
       <Item2>
-        <Expression Value="CurrentBlockNum"/>
+        <Expression Value="OldVal"/>
       </Item2>
       <Item3>
-        <Expression Value="BlockNum"/>
+        <Expression Value="Value"/>
       </Item3>
+      <Item4>
+        <Expression Value="Diff"/>
+      </Item4>
     </Watches>
   </Debugging>
 </CONFIG>
