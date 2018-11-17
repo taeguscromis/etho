@@ -28,7 +28,7 @@
   </head>
   <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
     <div id="maincontent">
-      <div class="container-fluid" style="max-width: 1600px">
+      <div class="container-fluid d-none d-lg-block" id="richlisttable_header">
         <div class="row">
           <div class="col-sm-3 card text-center">
             <div class="card-body" id="pageLogo">

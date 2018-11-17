@@ -50,7 +50,7 @@
       while($row = $result->fetch_assoc()) 
       {
         $addrvalue = floatval($row["value"]) / pow(10,18);
-        $addrpercent = $addrvalue / (floatval($supply["supply"]) / pow(10,18));
+        $addrpercent = ($addrvalue / (floatval($supply["supply"]) / pow(10,18))) * 100;
 
         $row_data = array();
         array_push($row_data, $row["id"]);

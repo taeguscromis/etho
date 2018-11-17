@@ -27,6 +27,7 @@ $(document).ready(function()
   {
       "searching": false,
       "pageLength": 50,
+      "responsive": true,
       "processing": true,
       "serverSide": true,
       "scrollCollapse": true,

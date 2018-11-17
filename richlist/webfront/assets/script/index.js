@@ -3,7 +3,7 @@ $(document).ready(function()
   function getDataTableHeight()
 	{
     var tableBottom = $("#richlisttable_wrapper").offset().top + $("#richlisttable_wrapper").outerHeight(true);
-    return ($('.dataTables_scrollBody').height() - (tableBottom - $(window).height())) - 60;
+    return ($('.dataTables_scrollBody').height() - (tableBottom - $(window).height())) - 40;
   }
 
   var ImportantAddresses = 
@@ -16,12 +16,13 @@ $(document).ready(function()
   $('#richlisttable').DataTable( 
   {
       "pageLength": 50,
+      "responsive": true,
       "processing": true,
       "serverSide": true,
       "scrollCollapse": true,
       "pagingType": "full_numbers",
       "ajax": "index_load.php",
-      "sScrollY": $(window).height() - 160,
+      "sScrollY": $(window).height() - 140,
       "order": [[ 2, "desc" ]],
       'columnDefs': 
       [
@@ -85,6 +86,7 @@ $(document).ready(function()
 
   // add class to the search filter
   $('#richlisttable_filter input').addClass('searchFilter');
+  $('#richlisttable_filter').addClass('d-none d-lg-block');
 
   onWindowResizeEvent();    
 });

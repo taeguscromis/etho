@@ -25,6 +25,11 @@ td.text-right
 	margin: 0 auto;
 }
 
+#richlisttable_header
+{
+	max-width: 1600px;
+}
+
 #richlisttable
 {
 
@@ -50,10 +55,36 @@ label.addressLabel
 .row
 {
 	align-items: center;
-        justify-content: center;
+    justify-content: center;
 }
 
 #pageLogo {
 	text-align: left;
 	padding-left: 0px;
+}
+
+.dtr-details
+{
+	width: 100%;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::before, table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child::before
+{
+	top: 50%;
+	margin-top: -8px;
+}
+
+@media screen and (max-width: 1600px) 
+{
+	#richlisttable_wrapper
+	{
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+
+	#richlisttable_header
+	{
+		padding-left: 2em;
+		padding-right: 2em;
+	}
 }
