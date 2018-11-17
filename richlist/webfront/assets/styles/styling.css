@@ -88,3 +88,16 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
 		padding-right: 2em;
 	}
 }
+
+@media screen and (max-width: 500px) 
+{
+	body
+	{
+  		font-size: 0.6em !important;
+	}
+	
+	table.dataTable thead th, table.dataTable tfoot th 
+	{
+    	font-size: 1em !important;
+	}
+}
