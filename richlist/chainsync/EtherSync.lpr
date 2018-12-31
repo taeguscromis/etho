@@ -163,8 +163,9 @@ begin
   ToAddress := aRecord.FindPath('to');
 
   FSQLQuery.SQL.Clear;
-  FSQLQuery.SQL.Add('INSERT INTO transactions (hash,block,timestamp,fromaddr,toaddr,value) VALUES (:hash,:block,:timestamp,:fromaddr,:toaddr,:value)');
+  FSQLQuery.SQL.Add('INSERT INTO transactions (hash,txhash, block,timestamp,fromaddr,toaddr,value) VALUES (:hash,:txhash,:block,:timestamp,:fromaddr,:toaddr,:value)');
   FSQLQuery.ParamByName('hash').AsString := aRecord.FindPath('blockHash').AsString;
+  FSQLQuery.ParamByName('txhash').AsString := aRecord.FindPath('hash').AsString;
   FSQLQuery.ParamByName('block').AsLargeInt := BlockNumber;
   FSQLQuery.ParamByName('timestamp').AsDateTime := UnixToDateTime(Trunc(Timestamp));
   FSQLQuery.ParamByName('value').AsFloat := HexToDecimal(aRecord.FindPath('value').AsString);
