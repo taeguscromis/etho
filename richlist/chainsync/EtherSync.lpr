@@ -22,7 +22,11 @@ type
     FSQLConn: TSQLConnector;
     FSQLQuery: TSQLQuery;
     FSQLTrans: TSQLTransaction;
+    FWebHookURL: string;
     FSyncSettings: TIniFile;
+    FAddressNames: TStringList;
+    FAddressHashes: TStringList;
+    FAlertValueLimit: Integer;
     procedure ConnectToMysqlDB;
     procedure DisconnectFromMysqlSB;
     procedure AddTransactionToMysqlDB(const aRecord: TJSONData;
@@ -154,9 +158,14 @@ end;
 procedure TEtherSync.AddTransactionToMysqlDB(const aRecord: TJSONData;
                                              const Timestamp: Double);
 var
+  HTTP: THTTPSend;
+  Value: Double;
+  AddrIndex: Integer;
   BlockNumber: Int64;
-  FromAddress: TJSONData;
   ToAddress: TJSONData;
+  FromAddress: TJSONData;
+  Parameters: TJSONObject;
+  ParametersAsStream: TStringStream;
 begin
   BlockNumber := Trunc(HexToDecimal(aRecord.FindPath('blockNumber').AsString));
   FromAddress := aRecord.FindPath('from');
@@ -184,6 +193,74 @@ begin
     UpdateAddressBalance(aRecord.FindPath('to').AsString);
   if not FromAddress.IsNull then
     UpdateAddressBalance(aRecord.FindPath('from').AsString);
+
+  // check for suspicious transactions
+  if (FAddressHashes.Count > 0) and (FAlertValueLimit > 0)  then
+  begin
+    if (not ToAddress.IsNull) and (not FromAddress.IsNull) then
+    begin
+      // check the recipient address first
+      AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(ToAddress.AsString));
+
+      if AddrIndex > -1 then
+      begin
+        Value := (HexToDecimal(aRecord.FindPath('value').AsString) / Power(10,18));
+
+        if Value > FAlertValueLimit then
+        begin
+          HTTP := THTTPSend.Create;
+          try
+            Parameters := TJSONObject.Create;
+            try
+              Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FromAddress.AsString, FAddressNames[AddrIndex]]));
+
+              ParametersAsStream := TStringStream.Create(Parameters.AsJson);
+              HTTP.Document.CopyFrom(ParametersAsStream, 0);
+              HTTP.MimeType := 'application/json';
+
+              HTTP.HTTPMethod('POST', FWebHookURL);
+            finally
+              Parameters.Free;
+            end;
+          finally
+            HTTP.Free;
+          end;
+        end;
+      end;
+
+      if (not ToAddress.IsNull) and (not FromAddress.IsNull) then
+      begin
+        // check the sender address second
+        AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(FromAddress.AsString));
+
+        if AddrIndex > -1 then
+        begin
+          Value := (HexToDecimal(aRecord.FindPath('value').AsString) / Power(10,18));
+
+          if Value > FAlertValueLimit then
+          begin
+            HTTP := THTTPSend.Create;
+            try
+              Parameters := TJSONObject.Create;
+              try
+                Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FAddressNames[AddrIndex], ToAddress.AsString]));
+
+                ParametersAsStream := TStringStream.Create(Parameters.AsJson);
+                HTTP.Document.CopyFrom(ParametersAsStream, 0);
+                HTTP.MimeType := 'application/json';
+
+                HTTP.HTTPMethod('POST', FWebHookURL);
+              finally
+                Parameters.Free;
+              end;
+            finally
+              HTTP.Free;
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TEtherSync.UpdateToRichListInMysqlDB(const address: string; const Timestamp: Double);
@@ -648,6 +725,14 @@ begin
   StopOnException:=True;
 
   FSyncSettings := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'settings.ini');
+  FAddressHashes := TStringList.Create;
+  FAddressNames := TStringList.Create;
+
+  FAddressHashes.CommaText := FSyncSettings.ReadString('monitoring', 'AddressHashes', '');
+  FAddressNames.CommaText := FSyncSettings.ReadString('monitoring', 'AddressNames', '');
+  FAlertValueLimit := FSyncSettings.ReadInteger('monitoring', 'ValueLimit', 0);
+  FWebHookURL := FSyncSettings.ReadString('monitoring', 'WebHookURL', '');
+  FAddressHashes.Sort;
 end;
 
 destructor TEtherSync.Destroy;
