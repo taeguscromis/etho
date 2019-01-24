@@ -195,43 +195,13 @@ begin
     UpdateAddressBalance(aRecord.FindPath('from').AsString);
 
   // check for suspicious transactions
-  if (FAddressHashes.Count > 0) and (FAlertValueLimit > 0)  then
-  begin
-    if (not ToAddress.IsNull) and (not FromAddress.IsNull) then
+  try
+    if (FAddressHashes.Count > 0) and (FAlertValueLimit > 0)  then
     begin
-      // check the recipient address first
-      AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(ToAddress.AsString));
-
-      if AddrIndex > -1 then
-      begin
-        Value := (HexToDecimal(aRecord.FindPath('value').AsString) / Power(10,18));
-
-        if Value > FAlertValueLimit then
-        begin
-          HTTP := THTTPSend.Create;
-          try
-            Parameters := TJSONObject.Create;
-            try
-              Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FromAddress.AsString, FAddressNames[AddrIndex]]));
-
-              ParametersAsStream := TStringStream.Create(Parameters.AsJson);
-              HTTP.Document.CopyFrom(ParametersAsStream, 0);
-              HTTP.MimeType := 'application/json';
-
-              HTTP.HTTPMethod('POST', FWebHookURL);
-            finally
-              Parameters.Free;
-            end;
-          finally
-            HTTP.Free;
-          end;
-        end;
-      end;
-
       if (not ToAddress.IsNull) and (not FromAddress.IsNull) then
       begin
-        // check the sender address second
-        AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(FromAddress.AsString));
+        // check the recipient address first
+        AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(ToAddress.AsString));
 
         if AddrIndex > -1 then
         begin
@@ -243,7 +213,7 @@ begin
             try
               Parameters := TJSONObject.Create;
               try
-                Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FAddressNames[AddrIndex], ToAddress.AsString]));
+                Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FromAddress.AsString, FAddressNames[AddrIndex]]));
 
                 ParametersAsStream := TStringStream.Create(Parameters.AsJson);
                 HTTP.Document.CopyFrom(ParametersAsStream, 0);
@@ -258,7 +228,44 @@ begin
             end;
           end;
         end;
+
+        if (not ToAddress.IsNull) and (not FromAddress.IsNull) then
+        begin
+          // check the sender address second
+          AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(FromAddress.AsString));
+
+          if AddrIndex > -1 then
+          begin
+            Value := (HexToDecimal(aRecord.FindPath('value').AsString) / Power(10,18));
+
+            if Value > FAlertValueLimit then
+            begin
+              HTTP := THTTPSend.Create;
+              try
+                Parameters := TJSONObject.Create;
+                try
+                  Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FAddressNames[AddrIndex], ToAddress.AsString]));
+
+                  ParametersAsStream := TStringStream.Create(Parameters.AsJson);
+                  HTTP.Document.CopyFrom(ParametersAsStream, 0);
+                  HTTP.MimeType := 'application/json';
+
+                  HTTP.HTTPMethod('POST', FWebHookURL);
+                finally
+                  Parameters.Free;
+                end;
+              finally
+                HTTP.Free;
+              end;
+            end;
+          end;
+        end;
       end;
+    end;
+  except
+    on E: Exception do
+    begin
+      WriteLn(Format('Error checking for suspicious transactions %s', [E.Message]));
     end;
   end;
 end;
@@ -732,7 +739,6 @@ begin
   FAddressNames.CommaText := FSyncSettings.ReadString('monitoring', 'AddressNames', '');
   FAlertValueLimit := FSyncSettings.ReadInteger('monitoring', 'ValueLimit', 0);
   FWebHookURL := FSyncSettings.ReadString('monitoring', 'WebHookURL', '');
-  FAddressHashes.Sort;
 end;
 
 destructor TEtherSync.Destroy;

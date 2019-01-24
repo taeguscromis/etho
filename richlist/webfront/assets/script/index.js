@@ -10,7 +10,9 @@ $(document).ready(function()
   {
     "0XE19363FFB51C62BEECD6783A2C9C5BFF5D4679AC": "Masternode Reward Address",
     "0XE2C8CBEC30C8513888F7A95171EA836F8802D981": "Ether-1 Dev Fund Address",
-    "0XFBD45D6ED333C4AE16D379CA470690E3F8D0D2A2": "Stex Exchange Wallet"
+    "0XFBD45D6ED333C4AE16D379CA470690E3F8D0D2A2": "Stex Exchange Wallet",
+    "0x3951F8fAA758f221EBd236797d23065A83633e32": "Mercatox Echange Wallet",
+    "0X548833F13D6BF156260F6E1769C847991C0F6324": "Graviex Echange Wallet"
   }
 
   $('#richlisttable').DataTable( 
@@ -32,6 +34,7 @@ $(document).ready(function()
        	},
        	{
       			"targets": 1,
+			"responsivePriority": -1,
       			"render": function ( data, type, full, meta ) 
      			  {
               var addressAsStr = data
@@ -86,7 +89,8 @@ $(document).ready(function()
 
   // add class to the search filter
   $('#richlisttable_filter input').addClass('searchFilter');
-  $('#richlisttable_filter').addClass('d-none d-lg-block');
+  $('#richlisttable_filter').addClass('d-none'); 
+  $('#richlisttable_filter').addClass('d-lg-block');
 
   onWindowResizeEvent();    
 });

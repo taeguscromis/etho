@@ -51,8 +51,6 @@
         array_push($row_data, number_format(floatval($row["value"]) / pow(10,18),2)); 
         array_push($rows_data, $row_data);
       }
-    } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
     // return the table data

@@ -1,0 +1,29 @@
+body
+{
+  background-color: #000;
+  font-size: 0.8em;
+  color: #ffffff;
+}
+
+.dataTables_wrapper .dataTables_processing {
+	padding-top: 8px;
+}
+
+.card
+{
+	background-color: #000;
+}
+
+table.dataTable thead th, table.dataTable tfoot th 
+{
+	color: #7a1336;
+	font-size: 1.2em;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	color: #f92472 !important;
+}
+
+a {
+    color: #f92472;
+}
