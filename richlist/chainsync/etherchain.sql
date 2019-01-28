@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
 --
 -- Host: localhost    Database: etherchain
 -- ------------------------------------------------------
--- Server version	5.7.22-0ubuntu0.16.04.1
+-- Server version	5.7.24-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,11 +32,15 @@ CREATE TABLE `richlist` (
   `lastOut` datetime DEFAULT NULL,
   `numIn` int(11) DEFAULT NULL,
   `numOut` int(11) DEFAULT NULL,
-  `value` float DEFAULT NULL,
+  `value` double DEFAULT NULL,
+  `needupdate` bigint(20) DEFAULT NULL,
+  `updatecount` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `address` (`address`),
-  KEY `address_idx` (`address`)
-) ENGINE=InnoDB AUTO_INCREMENT=8937 DEFAULT CHARSET=latin1;
+  KEY `address_idx` (`address`),
+  KEY `needupdate` (`needupdate`),
+  KEY `updatecount` (`updatecount`)
+) ENGINE=InnoDB AUTO_INCREMENT=10683 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,14 +52,19 @@ DROP TABLE IF EXISTS `transactions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transactions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `hash` varchar(255) DEFAULT NULL,
-  `block` varchar(255) DEFAULT NULL,
+  `hash` char(66) DEFAULT NULL,
+  `txhash` char(66) DEFAULT NULL,
+  `block` bigint(20) DEFAULT NULL,
   `timestamp` datetime DEFAULT NULL,
   `fromaddr` char(42) DEFAULT NULL,
   `toaddr` char(42) DEFAULT NULL,
   `value` float DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2812541 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  KEY `idx_block` (`block`),
+  KEY `idx_txhash` (`txhash`),
+  KEY `idx_fromaddr` (`fromaddr`),
+  KEY `idx_toaddr` (`toaddr`)
+) ENGINE=InnoDB AUTO_INCREMENT=3944832 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -67,4 +76,4 @@ CREATE TABLE `transactions` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-03  9:23:05
+-- Dump completed on 2019-01-28 17:38:49
