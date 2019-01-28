@@ -23,6 +23,7 @@ type
     FSQLQuery: TSQLQuery;
     FSQLTrans: TSQLTransaction;
     FWebHookURL: string;
+    FIniFileName: string;
     FSyncSettings: TIniFile;
     FAddressNames: TStringList;
     FAddressHashes: TStringList;
@@ -712,12 +713,27 @@ begin
   end;
 
   // parse parameters
-  if HasOption('c', 'currBlock') then
+  if HasOption('currBlock') then
   begin
     ShowCurrentBlock;
     Terminate;
     Exit;
   end;
+
+  // parse parameters
+  if HasOption('iniFile') then
+    FIniFileName := GetOptionValue('iniFile')
+  else
+    FIniFileName := ExtractFilePath(ParamStr(0)) + 'settings.ini';
+
+  FSyncSettings := TIniFile.Create(FIniFileName);
+  FAddressHashes := TStringList.Create;
+  FAddressNames := TStringList.Create;
+
+  FAddressHashes.CommaText := FSyncSettings.ReadString('monitoring', 'AddressHashes', '');
+  FAddressNames.CommaText := FSyncSettings.ReadString('monitoring', 'AddressNames', '');
+  FAlertValueLimit := FSyncSettings.ReadInteger('monitoring', 'ValueLimit', 0);
+  FWebHookURL := FSyncSettings.ReadString('monitoring', 'WebHookURL', '');
 
   { add your program here }
   SyncEtherBlockchain;
@@ -730,15 +746,6 @@ constructor TEtherSync.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   StopOnException:=True;
-
-  FSyncSettings := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'settings.ini');
-  FAddressHashes := TStringList.Create;
-  FAddressNames := TStringList.Create;
-
-  FAddressHashes.CommaText := FSyncSettings.ReadString('monitoring', 'AddressHashes', '');
-  FAddressNames.CommaText := FSyncSettings.ReadString('monitoring', 'AddressNames', '');
-  FAlertValueLimit := FSyncSettings.ReadInteger('monitoring', 'ValueLimit', 0);
-  FWebHookURL := FSyncSettings.ReadString('monitoring', 'WebHookURL', '');
 end;
 
 destructor TEtherSync.Destroy;
