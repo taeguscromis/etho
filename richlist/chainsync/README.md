@@ -14,6 +14,8 @@ Just rename the settings.ini.sample to settings.ini and put it in the same direc
 The executable needs write permissions in that directory. It will be best if you run it as a service.
 Set the settings in the ini file accordingly.
 
+You can now also put the settings.ini file somwhere else and star the executable with "-iniFile %path_to_the_file%"
+
 ```
 [blockchain]
 lastblock=Should be set to 1, to start at the chain beggining
