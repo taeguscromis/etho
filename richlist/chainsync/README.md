@@ -16,6 +16,8 @@ Set the settings in the ini file accordingly.
 
 You can now also put the settings.ini file somwhere else and star the executable with "-iniFile %path_to_the_file%"
 
+If you need the notification to Discord feature for specific addresses just check out the notify.xml.sample file (it should be self explaining). Rename it to notify.xml and set it witgh the needed addresses you would like to monitor. That is all.
+
 ```
 [blockchain]
 lastblock=Should be set to 1, to start at the chain beggining
