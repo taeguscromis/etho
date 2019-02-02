@@ -3,9 +3,11 @@ program EtherSync;
 {$mode objfpc}{$H+}
 
 uses
-  Classes, SysUtils, CustApp,
+  Classes, SysUtils, CustApp, Contnrs,
   { you can add units after this }
   StrUtils, Math, DateUtils, IniFiles, SyncObjs,
+  // xml related units
+  DOM, XMLRead, XMLUtils,
   // HTTP
   httpsend, ssl_openssl,
   // JSON
@@ -15,6 +17,23 @@ uses
 
 type
 
+  { TNotifyObject }
+
+  TNotifyObject = class
+  private
+    FURL: string;
+    FName: string;
+    FAType: string;
+    FLimit: Integer;
+    FAddress: string;
+  public
+    property URL: string read FURL write FURL;
+    property Name: string read FName write FName;
+    property AType: string read FAType write FAType;
+    property Limit: Integer read FLimit write FLimit;
+    property Address: string read FAddress write FAddress;
+  end;
+
   { TEtherSync }
 
   TEtherSync = class(TCustomApplication)
@@ -22,12 +41,9 @@ type
     FSQLConn: TSQLConnector;
     FSQLQuery: TSQLQuery;
     FSQLTrans: TSQLTransaction;
-    FWebHookURL: string;
     FIniFileName: string;
     FSyncSettings: TIniFile;
-    FAddressNames: TStringList;
-    FAddressHashes: TStringList;
-    FAlertValueLimit: Integer;
+    FNotifyList: TFPObjectHashTable;
     procedure ConnectToMysqlDB;
     procedure DisconnectFromMysqlSB;
     procedure AddTransactionToMysqlDB(const aRecord: TJSONData;
@@ -46,6 +62,7 @@ type
     procedure UpdateTopHundredAddresses;
     procedure SyncEtherBlockchain;
     procedure ShowCurrentBlock;
+    procedure ParseNotifyList;
   protected
     procedure DoRun; override;
   public
@@ -161,11 +178,11 @@ procedure TEtherSync.AddTransactionToMysqlDB(const aRecord: TJSONData;
 var
   HTTP: THTTPSend;
   Value: Double;
-  AddrIndex: Integer;
   BlockNumber: Int64;
   ToAddress: TJSONData;
   FromAddress: TJSONData;
   Parameters: TJSONObject;
+  NotifyObject: TNotifyObject;
   ParametersAsStream: TStringStream;
 begin
   BlockNumber := Trunc(HexToDecimal(aRecord.FindPath('blockNumber').AsString));
@@ -197,30 +214,30 @@ begin
 
   // check for suspicious transactions
   try
-    if (FAddressHashes.Count > 0) and (FAlertValueLimit > 0)  then
+    if FNotifyList.Count > 0 then
     begin
       if (not ToAddress.IsNull) and (not FromAddress.IsNull) then
       begin
         // check the recipient address first
-        AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(ToAddress.AsString));
+        NotifyObject := TNotifyObject(FNotifyList.Items[AnsiUpperCase(ToAddress.AsString)]);
 
-        if AddrIndex > -1 then
+        if NotifyObject <> nil then
         begin
           Value := (HexToDecimal(aRecord.FindPath('value').AsString) / Power(10,18));
 
-          if Value > FAlertValueLimit then
+          if Value > NotifyObject.Limit then
           begin
             HTTP := THTTPSend.Create;
             try
               Parameters := TJSONObject.Create;
               try
-                Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FromAddress.AsString, FAddressNames[AddrIndex]]));
+                Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FromAddress.AsString, NotifyObject.Name]));
 
                 ParametersAsStream := TStringStream.Create(Parameters.AsJson);
                 HTTP.Document.CopyFrom(ParametersAsStream, 0);
                 HTTP.MimeType := 'application/json';
 
-                HTTP.HTTPMethod('POST', FWebHookURL);
+                HTTP.HTTPMethod('POST', NotifyObject.URL);
               finally
                 Parameters.Free;
               end;
@@ -233,25 +250,25 @@ begin
         if (not ToAddress.IsNull) and (not FromAddress.IsNull) then
         begin
           // check the sender address second
-          AddrIndex := FAddressHashes.IndexOf(AnsiUpperCase(FromAddress.AsString));
+          NotifyObject := TNotifyObject(FNotifyList.Items[AnsiUpperCase(FromAddress.AsString)]);
 
-          if AddrIndex > -1 then
+          if NotifyObject <> nil then
           begin
             Value := (HexToDecimal(aRecord.FindPath('value').AsString) / Power(10,18));
 
-            if Value > FAlertValueLimit then
+            if Value > NotifyObject.Limit then
             begin
               HTTP := THTTPSend.Create;
               try
                 Parameters := TJSONObject.Create;
                 try
-                  Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, FAddressNames[AddrIndex], ToAddress.AsString]));
+                  Parameters.Add('content', Format('%f ETHO sent from **%s** to **%s**', [Value, NotifyObject.Name, ToAddress.AsString]));
 
                   ParametersAsStream := TStringStream.Create(Parameters.AsJson);
                   HTTP.Document.CopyFrom(ParametersAsStream, 0);
                   HTTP.MimeType := 'application/json';
 
-                  HTTP.HTTPMethod('POST', FWebHookURL);
+                  HTTP.HTTPMethod('POST', NotifyObject.URL);
                 finally
                   Parameters.Free;
                 end;
@@ -692,6 +709,40 @@ begin
   end;
 end;
 
+procedure TEtherSync.ParseNotifyList;
+var
+  Doc: TXMLDocument;
+  Address: string;
+  NotifyNode: TDOMNode;
+  NotifyObject: TNotifyObject;
+begin
+  Doc := nil;
+  try
+    if FileExists(ExtractFilePath(ParamStr(0)) + 'notify.xml') then
+    begin
+      // Read in xml file from disk
+      ReadXMLFile(Doc, ExtractFilePath(ParamStr(0)) + 'notify.xml');
+      NotifyNode := Doc.DocumentElement.FirstChild;
+
+      while Assigned(NotifyNode) do
+      begin
+        NotifyObject := TNotifyObject.Create;
+        Address := NotifyNode.FindNode('Address').FirstChild.NodeValue;
+
+        NotifyObject.URL := NotifyNode.FindNode('URL').FirstChild.NodeValue;
+        NotifyObject.Name := NotifyNode.FindNode('Name').FirstChild.NodeValue;
+        NotifyObject.AType := NotifyNode.FindNode('Type').FirstChild.NodeValue;
+        NotifyObject.Limit := StrToIntDef(NotifyNode.FindNode('Limit').FirstChild.NodeValue, -1);
+        FNotifyList.Add(Address, NotifyObject);
+
+        NotifyNode := NotifyNode.NextSibling;
+      end;
+    end;
+  finally
+    FreeAndNil(Doc)
+  end;
+end;
+
 procedure TEtherSync.DoRun;
 //var
 //  ErrorMsg: String;
@@ -727,13 +778,7 @@ begin
     FIniFileName := ExtractFilePath(ParamStr(0)) + 'settings.ini';
 
   FSyncSettings := TIniFile.Create(FIniFileName);
-  FAddressHashes := TStringList.Create;
-  FAddressNames := TStringList.Create;
-
-  FAddressHashes.CommaText := FSyncSettings.ReadString('monitoring', 'AddressHashes', '');
-  FAddressNames.CommaText := FSyncSettings.ReadString('monitoring', 'AddressNames', '');
-  FAlertValueLimit := FSyncSettings.ReadInteger('monitoring', 'ValueLimit', 0);
-  FWebHookURL := FSyncSettings.ReadString('monitoring', 'WebHookURL', '');
+  ParseNotifyList;
 
   { add your program here }
   SyncEtherBlockchain;
@@ -746,11 +791,14 @@ constructor TEtherSync.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   StopOnException:=True;
+
+  FNotifyList := TFPObjectHashTable.Create(True);
 end;
 
 destructor TEtherSync.Destroy;
 begin
   FreeAndNil(FSyncSettings);
+  FreeAndNil(FNotifyList);
 
   inherited Destroy;
 end;
