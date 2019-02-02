@@ -11,9 +11,3 @@ Password=mysqlpassword
 [rpc]
 url=https://rpc.ether1.org
 
-[monitoring]
-AddressHashes=0XFBD45D6ED333C4AE16D379CA470690E3F8D0D2A2,0x3951F8fAA758f221EBd236797d23065A83633e32,0X548833F13D6BF156260F6E1769C847991C0F6324
-AddressNames=STEX,MERCATOX,GRAVIEX
-WebHookURL=https://discordapp.com/api/webhooks/532933000908767242/26Mt2kdUt04oLYK-7AG26vCDoZspiav8_jWSibaiOiNA0t8F2XifrtD7u5krylmlo6ai
-ValueLimit=5
-
