@@ -10,31 +10,31 @@
   } 
   else 
   {
-    $address = $_GET['address'];
-    $toBlock = intval($_GET['toBlock']);
-    $fromBlock = intval($_GET['fromBlock']);
+    $toBlock = $_GET['to'];
+    $fromBlock = $_GET['from'];
     // main query for the actuall table data
-    $sql = "SELECT * FROM transactions WHERE (fromaddr = '$address' OR toaddr = '$address') AND (block > $fromBlock AND block < $toBlock) ORDER BY block";
+    $sql = "SELECT * FROM transactions WHERE (fromaddr = '" . $_GET['address'] . "') OR (toaddr = '" . $_GET['address'] . "') AND ($fromBlock <= BLOCK) AND ($toBlock >= BLOCK)";
     $result = $conn->query($sql);
     $table_data = (object) [];
-    $rows_data = array();
-
 
     if ($result->num_rows > 0) 
     {
+      $rows_data = array();
+
       // output data of each row
       while($row = $result->fetch_assoc()) 
       {
         $data_object = (object) [];
         $data_object->id = $row["id"];
         $data_object->block = $row["block"];
-        $data_object->txhash = $row["txhash"];
         $data_object->timestamp = $row["timestamp"];
         $data_object->fromaddr = $row["fromaddr"];
         $data_object->toaddr = $row["toaddr"];
         $data_object->value = $row["value"];
         array_push($rows_data, $data_object);
       }
+    } else {
+      echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
     // return the table data

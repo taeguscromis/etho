@@ -26,15 +26,6 @@
     $sql = "SELECT * FROM richlist WHERE address LIKE '%$searchAddress%' ORDER BY $orderColumn $orderDir LIMIT $record_limit OFFSET $record_start";
     $result = $conn->query($sql);
 
-    // the current circulating supply of ETHO
-    $supply = $conn->query("SELECT sum(value) as 'supply' FROM richlist");
-    $supply = $supply->fetch_assoc();
-
-    // count of total rows in the richlist table
-    $count = $conn->query("SELECT count(*) as 'total_rows' FROM (SELECT id FROM richlist WHERE address LIKE '%$searchAddress%') AS derived");
-    $count = $count->fetch_assoc();
-
-
     $table_data = (object) 
     [
       'draw' => $_GET['draw'],
@@ -42,36 +33,50 @@
       'recordsFiltered' => $count["total_rows"]
     ];
 
-    if ($result->num_rows > 0) 
-    {
-      $rows_data = array();
+    // create rows data
+    $rows_data = array();
 
-      // output data of each row
-      while($row = $result->fetch_assoc()) 
+    if ($result->num_rows > 0) {
+      // the current circulating supply of ETHO
+      $supply = $conn->query("SELECT sum(value) as 'supply' FROM richlist");
+      $supply = $supply->fetch_assoc();
+
+      // count of total rows in the richlist table
+      $count = $conn->query("SELECT count(*) as 'total_rows' FROM (SELECT id FROM richlist WHERE address LIKE '%$searchAddress%') AS derived");
+      $count = $count->fetch_assoc();
+
+      if ($result->num_rows > 0) 
       {
-        $addrvalue = floatval($row["value"]) / pow(10,18);
-        $addrpercent = ($addrvalue / (floatval($supply["supply"]) / pow(10,18))) * 100;
 
-        $row_data = array();
-        array_push($row_data, $row["id"]);
-        array_push($row_data, $row["address"]);
-        array_push($row_data, number_format($addrvalue,2)); 
-        array_push($row_data, number_format($addrpercent,2)); 
-        array_push($row_data, $row["firstIn"]);
-        array_push($row_data, $row["lastIn"]);
-        array_push($row_data, $row["numIn"]);
-        array_push($row_data, $row["firstOut"]);
-        array_push($row_data, $row["lastOut"]);
-        array_push($row_data, $row["numOut"]);
-        array_push($rows_data, $row_data);
+        // output data of each row
+        while($row = $result->fetch_assoc()) 
+        {
+          $addrvalue = floatval($row["value"]) / pow(10,18);
+          $addrpercent = ($addrvalue / (floatval($supply["supply"]) / pow(10,18))) * 100;
+
+          $row_data = array();
+          array_push($row_data, $row["id"]);
+          array_push($row_data, $row["address"]);
+          array_push($row_data, number_format($addrvalue,2)); 
+          array_push($row_data, number_format($addrpercent,2)); 
+          array_push($row_data, $row["firstIn"]);
+          array_push($row_data, $row["lastIn"]);
+          array_push($row_data, $row["numIn"]);
+          array_push($row_data, $row["firstOut"]);
+          array_push($row_data, $row["lastOut"]);
+          array_push($row_data, $row["numOut"]);
+          array_push($rows_data, $row_data);
+        }
+      } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
       }
-    } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
     // return the table data
     $table_data->data = $rows_data;    
-    echo json_encode($table_data);
+    echo json_encode($table_data);      
+
+    // close connection
+    $conn->close();   
   }
-  $conn->close();   
 ?>
