@@ -7,3 +7,5 @@ Each project is a separated entity but integrated into the Ether1 ecosystem
 
 This is the Richlist for the Ether1 project. It works by building the DB from the blockchain, going block by block and processing transactions for each block.
 You can read more about it [here](https://github.com/taeguscromis/etho/tree/master/richlist)
+
+![Richlist showcasw](https://github.com/taeguscromis/etho/blob/master/richlist/showcase.jpg)
